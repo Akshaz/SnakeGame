@@ -1,5 +1,6 @@
 import pygame, math, random
 
+#Food class for generating new food
 class food:
 
     def __init__(self):
@@ -8,7 +9,7 @@ class food:
     def drawRect(self, window):
         pygame.draw.rect(window, (255, 0, 0), (self.food[0], self.food[1], 15, 15))
 
-    def drawFood(self,window,flag):
+    def drawFood(self,window,flag):                 #Generates food module on graph
         if flag:
             self.food[0] = random.randint(0, 50)*15
             self.food[1] = random.randint(3, 40)*15
@@ -18,6 +19,7 @@ class food:
         return self.food
 
 
+#Snake class for functions and attributes related to snake
 class Snake:
 
     def __init__(self):
@@ -30,7 +32,7 @@ class Snake:
     def drawRect(self, window, coordinate):
         pygame.draw.rect(window, (0,255,0), (coordinate[0], coordinate[1], 15, 15))
 
-    def moveSnake(self):
+    def moveSnake(self):                    #To move snake head according to direction
         if self.direction == "left":
             self.coor[0]-=15
         elif self.direction == "right":
@@ -40,21 +42,21 @@ class Snake:
         elif self.direction == "down":
             self.coor[1]+=15
 
-    def drawSnake(self, window):
+    def drawSnake(self, window):            #Draw snake on screen
         self.coordinates.append(tuple(self.coor))
         while (len(self.coordinates) > self.count):
             self.coordinates.pop(0)
         for i in self.coordinates:
             self.drawRect(window, i)
 
-    def isEaten(self, food):
+    def isEaten(self, food):                #To check if food has been eaten or not
         if self.coor[0] == food[0] and self.coor[1] == food[1]:
             self.count+=1
             return True
         else:
             return False
 
-    def death(self, width, height):
+    def death(self, width, height):         #To check if the snake has hit the wall or hit itself
         if self.coor[0] == width or self.coor[1] == height or self.coor[0] < 0 or self.coor[1] < 45:
             return True
         else:
@@ -70,7 +72,7 @@ class Snake:
     #     if pygame.mouse.get_pressed()[0]:
     #         self.count+=1
 
-    def keyPressed(self):
+    def keyPressed(self):                       #Returns which key pressed
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and not(keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_DOWN]):
             self.direction = "left"
@@ -81,7 +83,7 @@ class Snake:
         elif keys[pygame.K_DOWN] and not(keys[pygame.K_RIGHT] or keys[pygame.K_UP] or keys[pygame.K_LEFT]):
             self.direction = "down"
 
-def boardDraw(window, width, height):
+def boardDraw(window, width, height):                   #Draws board
     for i in range(0, width, 15):
         pygame.draw.line(window, (255, 255, 255), (i, 45), (i, height))
     for i in range(0, height, 15):
